@@ -51,7 +51,23 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
     j$.buildExpectationResult = jRequire.buildExpectationResult();
     j$.noopTimer = jRequire.noopTimer();
     j$.JsApiReporter = jRequire.JsApiReporter(j$);
-    j$.matchersUtil = jRequire.matchersUtil(j$);
+    j$.asymmetricEqualityTesterArgCompatShim = jRequire.asymmetricEqualityTesterArgCompatShim(
+      j$
+    );
+    j$.MatchersUtil = jRequire.MatchersUtil(j$);
+    var staticMatchersUtil = new j$.MatchersUtil({ customTesters: [] });
+    Object.defineProperty(j$, 'matchersUtil', {
+      get: function() {
+        j$.getEnv().deprecated(
+          'jasmine.matchersUtil is deprecated and will be removed ' +
+            'in a future release. Use the instance passed to the matcher factory or ' +
+            "the asymmetric equality tester's `asymmetricMatch` method instead. " +
+            'TODO link to docs.'
+        );
+        return staticMatchersUtil;
+      }
+    });
+
     j$.ObjectContaining = jRequire.ObjectContaining(j$);
     j$.ArrayContaining = jRequire.ArrayContaining(j$);
     j$.ArrayWithExactContents = jRequire.ArrayWithExactContents(j$);

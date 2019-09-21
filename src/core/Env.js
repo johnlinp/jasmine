@@ -276,7 +276,18 @@ getJasmineRequireObj().Env = function(j$) {
       }
       var customMatchers =
         runnableResources[currentRunnable().id].customMatchers;
+
       for (var matcherName in matchersToAdd) {
+        if (matchersToAdd[matcherName].length > 1) {
+          self.deprecated(
+            'The matcher factory for "' +
+              matcherName +
+              '" ' +
+              'accepts custom equality testers, but this parameter will no longer be ' +
+              'passed in a future release. TODO link to docs.'
+          );
+        }
+
         customMatchers[matcherName] = matchersToAdd[matcherName];
       }
     };
@@ -289,7 +300,18 @@ getJasmineRequireObj().Env = function(j$) {
       }
       var customAsyncMatchers =
         runnableResources[currentRunnable().id].customAsyncMatchers;
+
       for (var matcherName in matchersToAdd) {
+        if (matchersToAdd[matcherName].length > 1) {
+          self.deprecated(
+            'The matcher factory for "' +
+              matcherName +
+              '" ' +
+              'accepts custom equality testers, but this parameter will no longer be ' +
+              'passed in a future release. TODO link to docs.'
+          );
+        }
+
         customAsyncMatchers[matcherName] = matchersToAdd[matcherName];
       }
     };
@@ -308,9 +330,12 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var expectationFactory = function(actual, spec) {
+      var customEqualityTesters =
+        runnableResources[spec.id].customEqualityTesters;
+
       return j$.Expectation.factory({
-        util: j$.matchersUtil,
-        customEqualityTesters: runnableResources[spec.id].customEqualityTesters,
+        util: new j$.MatchersUtil({ customTesters: customEqualityTesters }),
+        customEqualityTesters: customEqualityTesters,
         customMatchers: runnableResources[spec.id].customMatchers,
         actual: actual,
         addExpectationResult: addExpectationResult
@@ -322,8 +347,11 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     var asyncExpectationFactory = function(actual, spec) {
+      var customEqualityTesters =
+        runnableResources[spec.id].customEqualityTesters;
+
       return j$.Expectation.asyncFactory({
-        util: j$.matchersUtil,
+        util: new j$.MatchersUtil({ customTesters: customEqualityTesters }),
         customEqualityTesters: runnableResources[spec.id].customEqualityTesters,
         customAsyncMatchers: runnableResources[spec.id].customAsyncMatchers,
         actual: actual,
