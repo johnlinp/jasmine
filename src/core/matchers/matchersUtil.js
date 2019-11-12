@@ -1,6 +1,4 @@
 getJasmineRequireObj().MatchersUtil = function(j$) {
-  // TODO: convert all uses of j$.pp to use the injected pp
-
   function MatchersUtil(options) {
     options = options || {};
     this.customTesters_ = options.customTesters || [];
