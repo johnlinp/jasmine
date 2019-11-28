@@ -11,10 +11,6 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
   }
 
   MatchersUtil.prototype.contains = function(haystack, needle, customTesters) {
-    if (customTesters) {
-      j$.getEnv().deprecated('Passing custom equality testers to MatchersUtil#contains is deprecated. TODO link to docs.');
-    }
-
     if (j$.isSet(haystack)) {
       return haystack.has(needle);
     }
@@ -95,16 +91,6 @@ getJasmineRequireObj().MatchersUtil = function(j$) {
     if (isDiffBuilder(customTestersOrDiffBuilder)) {
       diffBuilder = customTestersOrDiffBuilder;
     } else {
-      if (customTestersOrDiffBuilder) {
-        j$.getEnv().deprecated('Passing custom equality testers to MatchersUtil#equal ' +
-          'is deprecated. TODO link to docs');
-      }
-
-      if (diffBuilderOrNothing) {
-        j$.getEnv().deprecated('Diff builder should be passed as the third argument ' +
-          'to MatchersUtil#equal, not the fourth. TODO link to docs');
-      }
-
       // TODO: deprecate this form
       customTesters = customTestersOrDiffBuilder;
       diffBuilder = diffBuilderOrNothing;

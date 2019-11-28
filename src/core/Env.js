@@ -278,16 +278,6 @@ getJasmineRequireObj().Env = function(j$) {
         runnableResources[currentRunnable().id].customMatchers;
 
       for (var matcherName in matchersToAdd) {
-        if (matchersToAdd[matcherName].length > 1) {
-          self.deprecated(
-            'The matcher factory for "' +
-              matcherName +
-              '" ' +
-              'accepts custom equality testers, but this parameter will no longer be ' +
-              'passed in a future release. TODO link to docs.'
-          );
-        }
-
         customMatchers[matcherName] = matchersToAdd[matcherName];
       }
     };
@@ -302,16 +292,6 @@ getJasmineRequireObj().Env = function(j$) {
         runnableResources[currentRunnable().id].customAsyncMatchers;
 
       for (var matcherName in matchersToAdd) {
-        if (matchersToAdd[matcherName].length > 1) {
-          self.deprecated(
-            'The matcher factory for "' +
-              matcherName +
-              '" ' +
-              'accepts custom equality testers, but this parameter will no longer be ' +
-              'passed in a future release. TODO link to docs.'
-          );
-        }
-
         customAsyncMatchers[matcherName] = matchersToAdd[matcherName];
       }
     };

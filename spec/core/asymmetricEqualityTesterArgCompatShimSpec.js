@@ -13,52 +13,27 @@ describe('asymmetricEqualityTesterArgCompatShim', function() {
     expect(shim.bar).toBe(matchersUtil.bar);
   });
 
-  it('provides and deprecates all the properties of the customEqualityTesters', function() {
+  it('provides all the properties of the customEqualityTesters', function() {
     var customEqualityTesters = [function() {}, function() {}],
       shim = jasmineUnderTest.asymmetricEqualityTesterArgCompatShim(
         {},
         customEqualityTesters
-      ),
-      deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated'),
-      expectedMessage =
-        'The second argument to asymmetricMatch is now a MatchersUtil. ' +
-        'Using it as an array of custom equality testers is deprecated and will stop ' +
-        'working in a future release. TODO link to docs.';
+      );
 
     expect(shim.length).toBe(2);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
-    deprecated.calls.reset();
-
     expect(shim[0]).toBe(customEqualityTesters[0]);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
-    deprecated.calls.reset();
-
     expect(shim[1]).toBe(customEqualityTesters[1]);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
   });
 
-  it('provides and deprecates all the properties of Array.prototype', function() {
-    var shim = jasmineUnderTest.asymmetricEqualityTesterArgCompatShim({}, []),
-      deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated'),
-      expectedMessage =
-        'The second argument to asymmetricMatch is now a MatchersUtil. ' +
-        'Using it as an array of custom equality testers is deprecated and will stop ' +
-        'working in a future release. TODO link to docs.';
+  it('provides all the properties of Array.prototype', function() {
+    var shim = jasmineUnderTest.asymmetricEqualityTesterArgCompatShim({}, []);
 
     expect(shim.filter).toBe(Array.prototype.filter);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
-    deprecated.calls.reset();
-
     expect(shim.forEach).toBe(Array.prototype.forEach);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
-    deprecated.calls.reset();
-
     expect(shim.map).toBe(Array.prototype.map);
-    expect(deprecated).toHaveBeenCalledWith(expectedMessage);
-    deprecated.calls.reset();
   });
 
-  it('provides and deprecates properties of Array.prototype', function() {
+  it('provides properties of Array.prototype', function() {
     var keys = [
         'concat',
         'constructor',
@@ -98,7 +73,6 @@ describe('asymmetricEqualityTesterArgCompatShim', function() {
         'values'
       ],
       shim = jasmineUnderTest.asymmetricEqualityTesterArgCompatShim({}, []),
-      deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated'),
       i,
       k;
 
@@ -111,8 +85,6 @@ describe('asymmetricEqualityTesterArgCompatShim', function() {
       expect(shim[k])
         .withContext(k)
         .toBe(Array.prototype[k]);
-      expect(deprecated).toHaveBeenCalled();
-      deprecated.calls.reset();
     }
 
     // Properties that are present on only some supported runtimes
@@ -123,21 +95,7 @@ describe('asymmetricEqualityTesterArgCompatShim', function() {
         expect(shim[k])
           .withContext(k)
           .toBe(Array.prototype[k]);
-        expect(deprecated)
-          .withContext(k)
-          .toHaveBeenCalled();
-        deprecated.calls.reset();
       }
     }
-  });
-
-  it('does not deprecate properties of Object.prototype', function() {
-    var shim = jasmineUnderTest.asymmetricEqualityTesterArgCompatShim({}, []),
-      deprecated = spyOn(jasmineUnderTest.getEnv(), 'deprecated');
-
-    expect(shim.hasOwnProperty).toBe(Object.prototype.hasOwnProperty);
-    expect(shim.isPrototypeOf).toBe(Object.prototype.isPrototypeOf);
-
-    expect(deprecated).not.toHaveBeenCalled();
   });
 });
