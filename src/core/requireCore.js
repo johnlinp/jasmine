@@ -57,9 +57,20 @@ var getJasmineRequireObj = (function(jasmineGlobal) {
     j$.makePrettyPrinter = jRequire.makePrettyPrinter(j$);
     j$.pp = j$.makePrettyPrinter();
     j$.MatchersUtil = jRequire.MatchersUtil(j$);
-    j$.matchersUtil = new j$.MatchersUtil({
+    var staticMatchersUtil = new j$.MatchersUtil({
       customTesters: [],
       pp: j$.pp
+    });
+    Object.defineProperty(j$, 'matchersUtil', {
+      get: function() {
+        j$.getEnv().deprecated(
+          'jasmine.matchersUtil is deprecated and will be removed ' +
+            'in a future release. Use the instance passed to the matcher factory or ' +
+            "the asymmetric equality tester's `asymmetricMatch` method instead. " +
+            'TODO link to docs.'
+        );
+        return staticMatchersUtil;
+      }
     });
 
     j$.ObjectContaining = jRequire.ObjectContaining(j$);
